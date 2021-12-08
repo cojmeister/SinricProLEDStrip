@@ -9,3 +9,6 @@ This is meant to compile to an ESP32 using platformIO, and your personal setting
 The code also uses the SinricPro, and FastLED dependencies from platformIO.
 
 My strip works in GRB for some reason, so if you see different colors than what you are meant to, then switch it back to RGB.
+
+Original Examples on:
+    https://github.com/sinricpro/esp8266-esp32-sdk/tree/master/examples

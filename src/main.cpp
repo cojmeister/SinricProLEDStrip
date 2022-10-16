@@ -16,7 +16,7 @@
 #include "colortables.h"
 #include "sensitiveData.h"
 
-// This is difined in the sensitiveData.h header file in order to keep the data private; you can do the same,
+// This is defined in the sensitiveData.h header file in order to keep the data private; you can do the same,
 // or just copy and paste into your code. and uncomment the next five lines.
 #ifndef WIFI_SSID
 #define WIFI_SSID yourwifiSSID // SSID
@@ -39,11 +39,11 @@
 #endif
 
 #define BAUD_RATE 9600 // Change baudrate to your need
-#define NUM_LEDS 130   // how many LEDs are on the stripe
+#define NUM_LEDS 65    // how many LEDs are on the stripe
 #define LED_PIN 2      // LED strip is connected to PIN 2
 
 #define MAX_BRIGHTNESS 255
-#define VOLTAGE 5 //[V] Power Supply Voltage
+#define VOLTAGE 5          //[V] Power Supply Voltage
 #define CURRENT_LIMIT 2000 //[mA] Current Limit for power supply; going over the rated limit will risk your supply
 
 bool powerState;
@@ -84,6 +84,7 @@ bool onBrightness(const String &deviceId, int &brightness)
   globalBrightness = brightness;
   FastLED.setBrightness(map(brightness, 0, 100, 0, MAX_BRIGHTNESS));
   FastLED.show();
+  Serial.printf("Brightness changed to %d\n", globalBrightness);
   return true;
 }
 
@@ -93,6 +94,7 @@ bool onAdjustBrightness(const String &deviceId, int brightnessDelta)
   brightnessDelta = globalBrightness;
   FastLED.setBrightness(map(globalBrightness, 0, 100, 0, MAX_BRIGHTNESS));
   FastLED.show();
+  Serial.printf("Brightness changed to %d\n", globalBrightness);
   return true;
 }
 
@@ -100,6 +102,7 @@ bool onColor(const String &deviceId, byte &r, byte &g, byte &b)
 {
   fill_solid(leds, NUM_LEDS, CRGB(g, r, b));
   FastLED.show();
+  Serial.printf("Color changed to GRB(%d, %d, %d)\n", g, r, b);
   return true;
 }
 
@@ -113,13 +116,13 @@ bool onColorTemperature(const String &deviceId, int &colorTemperature)
 
 void setupFastLED()
 {
-  int colTemp = 2700;
   FastLED.addLeds<WS2812B, LED_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(map(globalBrightness, 0, 100, 0, MAX_BRIGHTNESS));
   FastLED.setMaxPowerInVoltsAndMilliamps(VOLTAGE, CURRENT_LIMIT);
+
   // Set StartUp Color to be Warm White
-  colors color = colorTemperatures(colTemp);
-  fill_solid(leds, NUM_LEDS, CRGB(color.g, color.r, color.b));
+  CRGB default_color = CRGB(0, 0, 0);
+  fill_solid(leds, NUM_LEDS, default_color);
   FastLED.show();
 }
 
